@@ -27,7 +27,7 @@ if ($result->num_rows > 0) {
     exit;
 }
 
-$sql = "INSERT INTO users (name, phone, username, password, role) 
+$sql = "INSERT INTO users (full_name, phone, username, password, role) 
         VALUES ('$name', '$phone', '$username', '$hashedPassword', '$role')";
 
 if ($conn->query($sql)) {
@@ -35,6 +35,6 @@ if ($conn->query($sql)) {
 } else {
     echo json_encode(["error" => $conn->error]);
 }
-
 $conn->close();
+
 ?>

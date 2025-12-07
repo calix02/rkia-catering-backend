@@ -8,23 +8,31 @@ include "../config.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-$package_id = $data["packageID"] ?? '';
-$user_id = $data["userID"] ?? '';
-$event_date = $data["date"] ?? '';
-$event_location = $data["location"] ?? '';
-$event_time = $data["time"] ?? '';
+// Make sure correct keys exist
+$user_id     = isset($data["userID"]) ? intval($data["userID"]) : null;
+$package_id  = isset($data["packageID"]) ? intval($data["packageID"]) : null;
+$event_date  = $data["date"] ?? null;
+$event_time  = $data["time"] ?? null;
+$event_location = $data["eventLocation"] ?? null;
 
-$package_id   = $conn->real_escape_string($package_id);
-$user_id      = $conn->real_escape_string($user_id);
-$event_date   = $conn->real_escape_string($event_date);
-$event_location   = $conn->real_escape_string($event_location);
-$event_time = $conn->real_escape_string($event_time);
+if (!$user_id) {
+    echo json_encode(["error" => "Invalid or missing userID"]);
+    exit;
+}
+
+// Check if user exists
+$res = $conn->query("SELECT user_id FROM users WHERE user_id = $user_id");
+
+if ($res->num_rows === 0) {
+    echo json_encode(["error" => "User does not exist"]);
+    exit;
+}
 
 $status = "Pending";
 
 $sql = "
-    INSERT INTO bookings (package_id, user_id, event_date, event_time, event_location, booking_status)
-    VALUES ('$package_id', '$user_id', '$event_date', '$event_time', '$event_location', '$status')
+    INSERT INTO bookings (user_id, package_id, event_date, event_time, event_location, booking_status)
+    VALUES ($user_id, $package_id, '$event_date', '$event_time', '$event_location', '$status')
 ";
 
 if ($conn->query($sql)) {
@@ -32,6 +40,7 @@ if ($conn->query($sql)) {
 } else {
     echo json_encode(["error" => $conn->error]);
 }
+
 $conn->close();
 
 ?>
