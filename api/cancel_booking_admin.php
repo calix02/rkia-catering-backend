@@ -10,6 +10,14 @@ $data = json_decode(file_get_contents("php://input"), true);
 $booking_id = $conn->real_escape_string($data["booking_id"]);
 $action = $conn->real_escape_string($data["action"]);
 
+if ($action === "complete") {
+    $sql = "UPDATE bookings SET booking_status = 'Completed' WHERE booking_id = '$booking_id'";
+    echo $conn->query($sql)
+        ? json_encode(["message" => "Booking Completed"])
+        : json_encode(["error" => "Failed to complete"]);
+    exit;
+}
+
 if ($action === "approve") {
     $sql = "UPDATE bookings SET booking_status = 'Approved' WHERE booking_id = '$booking_id'";
     echo $conn->query($sql)
