@@ -58,5 +58,6 @@ if ($action === "update-account") {
 }
 
 
+
 echo json_encode(["error" => "Invalid action"]);
 ?>

@@ -19,6 +19,7 @@ $sql = "
     SELECT 
         e.event_name,
         e.image,
+        p.package_id,
         p.package_name,
         p.description,
         p.price
