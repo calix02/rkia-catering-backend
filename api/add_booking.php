@@ -36,7 +36,7 @@ $sql = "
 ";
 
 if ($conn->query($sql)) {
-    echo json_encode(["message" => "Booking added successfully"]);
+    echo json_encode(["message" => "Booking Request Sent"]);
 } else {
     echo json_encode(["error" => $conn->error]);
 }

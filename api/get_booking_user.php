@@ -25,9 +25,9 @@ $sql = "
     INNER JOIN users u ON b.user_id = u.user_id
     INNER JOIN packages p ON b.package_id = p.package_id
     INNER JOIN events e ON p.event_id = e.event_id
-    WHERE u.user_id = '$user_id' 
-    AND b.booking_status = 'Pending' 
-    OR b.booking_status = 'Approved'
+    WHERE u.user_id = '$user_id'  
+    AND NOT booking_status = 'Completed'
+    
    
     ORDER BY b.event_date DESC
 ";
